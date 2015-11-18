@@ -1,3 +1,6 @@
-{
-  "match":".*"
-}
+[
+  {
+  "match":".*",
+  "on":"message.text"
+  }
+]

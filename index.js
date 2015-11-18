@@ -1,45 +1,66 @@
 // construct a map of where we
 // are going to send commands for various ARN's 
 var fs = require('fs');
-var crypto = require('crypto');
 var aws = require('aws-sdk');
 var awsregion = 'us-west-2';
 var lambda = new aws.Lambda({region: awsregion});
-var knownFiles = JSON.parse(fs.readFileSync("knownfiles.json"));
+var rexList = {};
 var funcDir = 'funcregistry/';
-var toHash = [], isHashing = false;
+var toSearch = [];
 var sampleEvent = JSON.parse(fs.readFileSync("sampleEvent.json"));
 var needsInvoke = [], invoking = false;
 var returnData = {};
 
-function updateFunctionTable(callback) {
-  fs.readdirSync(funcDir).forEach(function(fileName) {
-    toHash.push(fileName);
-    if(!isHashing) {
-      startHashing(callback);
+function queueForFile(event, fileName) {
+  var file = rexList[fileName];
+  file.forEach(function(rex) {
+    var path = rex.on.split('.');
+    var marker = event;
+    for( var inPath; inPath = path.shift();) {
+      if(path.length < 1) {
+        if(marker[inPath].match(rex.match)) {
+          needsInvoke.push({FunctionName:fileName, Payload:JSON.stringify(event)});
+        }
+        return;
+      }
+      if(marker[inPath] === undefined) {
+        return;
+      }
+      marker = marker[inPath];
     }
   });
 }
+
+function updateFunctionTable(callback) {
+  fs.readdirSync(funcDir).forEach(function(fileName) {
+    JSON.parse(fs.readFileSync(funcDir + fileName)).forEach(function(data) {  
+      if(rexList[fileName] === undefined) {
+        rexList[fileName] = [data];
+      } else {
+        rexList[fileName].push(data);
+      }
+    });
+  });
+  callback();
+}
 exports.handler = function(event, context) { 
   updateFunctionTable(function() {
-    for(var func in knownFiles) {
-      if(event.message.text.match(knownFiles[func].matches)) {
-        var params = {
-          FunctionName: func,
-          Payload: JSON.stringify(event) 
-        };
-        if(!invoking) {
-          lambdaInvoke(function() {
-            context.succeed(returnData);
-          });
-        }
-      }
+    console.log(JSON.stringify(rexList));
+    for(var fileName in rexList) {
+      queueForFile(event, fileName);    
+    }
+    if(!invoking) {
+      lambdaInvoke(function() {
+      console.log(returnData);
+      // Done running lambda functions
+      });
     }
   });
 };
 function lambdaInvoke(callback) {
+  console.log(needsInvoke);
   if(needsInvoke.length < 1) {
-    isInvoking = false;
+    invoking = false;
     callback();
     return;
   }
@@ -53,38 +74,6 @@ function lambdaInvoke(callback) {
     }
     returnData[invokeParams.FunctionName] = data;
     lambdaInvoke(callback);
-    return;
   });
-}
-function startHashing(callback) {
-  if(toHash.length < 1) {
-    isHashing = false;
-    return;
-  } 
-  isHashing = true;
-  hashFile(toHash.shift(), callback);
-  startHashing(callback);
-}
-function hashFile(fileName, callback) {
-  var fd = fs.createReadStream(funcDir + fileName);
-  var hash = crypto.createHash('sha1');
-  hash.setEncoding('hex');
-  fd.on('end', function() {
-    hash.end();
-    hashComplete(fileName, hash.read(), callback);
-  });
-  fd.pipe(hash);
 }
 
-function hashComplete(fileName, fileHash, callback) {
-  console.log("hashComplete: " + fileName + " , " + fileHash);
-  if(knownFiles[fileName] === undefined || knownFiles[fileName].hash !== fileHash) {
-    var contents = JSON.parse(fs.readFileSync(funcDir + fileName));
-    console.log(contents);
-    knownFiles[fileName] = { hash: fileHash, matches: contents.match }; 
-  }
-  if(!isHashing) {
-    fs.writeFileSync('knownfiles.json', JSON.stringify(knownFiles));
-    callback();
-  }
-}
