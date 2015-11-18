@@ -2,10 +2,10 @@
 Coming Soon™
 
 ### What this is
-This is a port of @jonjonsonjrs fyb telegram bot. This version runs on AWS Lambda with AWS API Gateway, and the database runs on RDS.
+This is a port of @jonjonsonjr's fyb telegram bot. This version runs on AWS Lambda with AWS API Gateway, and the database runs on RDS
 
 ### Motivation 
-I wanted to make Jon's code run efficiently with aws lambda rather than requiring an entire VM to run.
+I wanted to make Jon's code run efficiently with aws lambda rather than requiring an entire VM.
 
 ### Design
 Inbound
