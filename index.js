@@ -52,7 +52,7 @@ exports.handler = function(event, context) {
     if(!invoking) {
       lambdaInvoke(function() {
       console.log(returnData);
-      // Done running lambda functions
+      context.succeed(returnData);
       });
     }
   });
