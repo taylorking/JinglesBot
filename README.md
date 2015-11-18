@@ -17,7 +17,7 @@ Telegram --[webhook]--> AWS API Gateway --[lambda]--> Dispatch Lambda function
 Outbound
 
 ``` 
-Dispatch Lambda Funciton --[lambda]--> Child command function --[bot api]-->Telegram
+Dispatch Lambda Funciton --[lambda]--> Child command function --[bot api]--> Telegram
 ```
 
 The bot will allow a user to hotplug modules into the bot. Drop a text file into funcregistry, named the arn you want to call formatted:
