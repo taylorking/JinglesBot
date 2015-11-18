@@ -24,7 +24,7 @@ The bot will allow a user to hotplug modules into the bot. Drop a text file into
 
 ```json
 {
-	match: "the regex we want to match"
+	"match": "the regex we want to match"
 }
 ```
 
