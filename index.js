@@ -1,5 +1,6 @@
 // construct a map of where we
 // are going to send commands for various ARN's 
+
 var fs = require('fs');
 var aws = require('aws-sdk');
 var awsregion = 'us-west-2';
