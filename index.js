@@ -46,6 +46,7 @@ function updateFunctionTable(callback) {
   callback();
 }
 exports.handler = function(event, context) { 
+  console.log("test");
   updateFunctionTable(function() {
     console.log(JSON.stringify(rexList));
     for(var fileName in rexList) {
