@@ -1,0 +1,14 @@
+{
+  "name": "litecoin-ticker",
+  "version": "1.0.0",
+  "description": "A simple application to show off taylorking's lambda function telegram chat dispatch thing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.67.0"
+  }
+}
