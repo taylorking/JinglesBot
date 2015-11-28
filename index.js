@@ -21,6 +21,7 @@ function queueForFile(event, fileName) {
       if(path.length < 1) {
         if(marker[inPath].match(rex.match)) {
           needsInvoke.push({FunctionName:fileName, Payload:JSON.stringify(event)});
+          console.log("Queuing for invoke: " + fileName);
         }
         return;
       }
