@@ -1,0 +1,6 @@
+[
+  {
+    "match":"\/ltc.*",
+    "on":"message.text"
+  }
+]

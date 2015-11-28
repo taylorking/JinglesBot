@@ -1,0 +1,10 @@
+[
+  {
+    "match":"\/frou.*",
+    "on":"message.text"
+  },
+  {
+    "match":"@fuckroubot.*",
+    "on":"message.text"
+  }
+]

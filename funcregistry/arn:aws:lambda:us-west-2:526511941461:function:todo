@@ -1,0 +1,7 @@
+[
+  {
+    "match":"\/todo.*",
+    "on":"message.text"
+  }
+]
+

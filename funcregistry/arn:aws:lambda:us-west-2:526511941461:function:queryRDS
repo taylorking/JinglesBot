@@ -1,0 +1,10 @@
+[
+  {
+    "match":"\/qrery.*",
+    "on":"message.text"
+  },
+  {
+    "match":"\/ttest.*",
+    "on":"message.text"
+  }
+]

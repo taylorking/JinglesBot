@@ -9,7 +9,6 @@ var lambda = new aws.Lambda({region: awsregion});
 var rexList = {};
 var funcDir = 'funcregistry/';
 var toSearch = [];
-var sampleEvent = JSON.parse(fs.readFileSync("sampleEvent.json"));
 var needsInvoke = [], invoking = false;
 var returnData = {};
 
@@ -54,7 +53,7 @@ exports.handler = function(event, context) {
     }
     if(!invoking) {
       lambdaInvoke(function() {
-      console.log(returnData);
+        context.succeed(returnData);
       });
     }
   });
@@ -67,6 +66,7 @@ function lambdaInvoke(callback) {
     return;
   }
   var invokeParams = needsInvoke.shift();
+  invoking = true;
   lambda.invoke(invokeParams, function(err, data) {
     if(err) { 
       // One of the lambda functions failed. We're gonna use that object
