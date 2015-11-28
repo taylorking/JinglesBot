@@ -1,0 +1,14 @@
+{
+  "name": "log-activity",
+  "version": "1.0.0",
+  "description": "A sample application to log all chat messages to the database ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^4.4.3"
+  }
+}
