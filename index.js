@@ -39,7 +39,9 @@ function updateFunctionTable(callback) {
       if(rexList[fileName] === undefined) {
         rexList[fileName] = [data];
       } else {
-        rexList[fileName].push(data);
+        if(rexList[fileName].indexOf(data) === -1) {
+          rexList[fileName].push(data);
+        }
       }
     });
   });
