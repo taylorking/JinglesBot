@@ -66,6 +66,7 @@ function lambdaInvoke(callback) {
   console.log("Needs Invoke: " + needsInvoke);
   if(needsInvoke.length < 1) {
     invoking = false;
+    console.log(JSON.stringify(returnData));
     callback();
     return;
   }
