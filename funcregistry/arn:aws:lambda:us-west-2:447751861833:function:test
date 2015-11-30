@@ -1,6 +1,0 @@
-[
-  {
-    "match":"/tttt.*",
-    "on":"message.text"
-  }
-]
