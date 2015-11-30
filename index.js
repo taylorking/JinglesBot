@@ -34,6 +34,7 @@ function queueForFile(event, fileName) {
 }
 
 function updateFunctionTable(callback) {
+  rexList = {};
   fs.readdirSync(funcDir).forEach(function(fileName) {
     JSON.parse(fs.readFileSync(funcDir + fileName)).forEach(function(data) {  
       if(rexList[fileName] === undefined) {
@@ -45,11 +46,11 @@ function updateFunctionTable(callback) {
       }
     });
   });
-  callback();
+  callback(rexList);
 }
 exports.handler = function(event, context) { 
   console.log("test");
-  updateFunctionTable(function() {
+  updateFunctionTable(function(rexList) {
     console.log(JSON.stringify(rexList));
     for(var fileName in rexList) {
       queueForFile(event, fileName);    
@@ -62,7 +63,7 @@ exports.handler = function(event, context) {
   });
 };
 function lambdaInvoke(callback) {
-  console.log(needsInvoke);
+  console.log("Needs Invoke: " + needsInvoke);
   if(needsInvoke.length < 1) {
     invoking = false;
     callback();
